@@ -16,7 +16,7 @@ class AccountRole {
 
   static add(account_id, roles_id, cb) {
     let values = '';
-    roles_id.array.forEach(element => {
+    roles_id.forEach(element => {
       values += `(
         ${account_id},
         ${role_id}
