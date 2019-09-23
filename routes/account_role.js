@@ -6,10 +6,13 @@ var router = express.Router();
 
 router.post('/', jwtAuth, (req, res, next) => {
   const account_id = req.body.account_id;
-  const role_id = req.body.role_id;
-  AccountRole.add(account_id, role_id, (err, result) => {
+  const roles_id = req.body.roles;
+  AccountRole.delete(account_id, (err) => {
     if (err) return next(err);
-    res.send({msg: 'ok', data: result});
+    AccountRole.add(account_id, roles_id, (err, result) => {
+      if (err) return next(err);
+      res.send({msg: 'ok', data: result});
+    });
   });
 });
 

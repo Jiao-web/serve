@@ -14,11 +14,16 @@ class AccountRole {
     });
   }
 
-  static add(account_id, role_id, cb) {
-    const sql = `insert into account_role_tbl(account_id, role_id) values(
-      ${account_id},
-      ${role_id}
-    )`;
+  static add(account_id, roles_id, cb) {
+    let values = '';
+    roles_id.array.forEach(element => {
+      values += `(
+        ${account_id},
+        ${role_id}
+      ),`;
+    });
+    values = values.substr(0, values.length - 1);
+    const sql = `insert into account_role_tbl(account_id, role_id) values ${values}`;
 
     pool.getConnection((err, connection) => {
       if (err) {

@@ -12,7 +12,6 @@ var websiteRouter = require('./routes/website');
 var roleRouter = require('./routes/role');
 var accountRouter = require('./routes/account');
 var accountRoleRouter = require('./routes/account_role');
-var articleRouter = require('./routes/article');
 var indexRouter = require('./routes/index');
 var statisticRouter = require('./routes/statistic');
 var app = express();
@@ -41,7 +40,6 @@ app.use('/website', websiteRouter);
 app.use('/role', roleRouter);
 app.use('/account', accountRouter);
 app.use('/accountRole', accountRoleRouter);
-app.use('/article', articleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
