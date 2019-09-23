@@ -5,7 +5,6 @@ var jwtAuth = require('../middleware/myauth');
 var adminCheck = require('../middleware/adminCheck');
 var moment = require('moment');
 var userConfig = require('../model/config');
-var Cache = require('../model/cache');
 var router = express.Router();
 
 var jwtTokenSecret = '%^&*iuet5437';
