@@ -19,7 +19,7 @@ class AccountRole {
     roles_id.forEach(element => {
       values += `(
         ${account_id},
-        ${role_id}
+        ${element}
       ),`;
     });
     values = values.substr(0, values.length - 1);
