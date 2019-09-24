@@ -15,6 +15,31 @@ class Account {
     });
   }
 
+  static upload(user_id, accounts, cb) {
+    let sql = `INSERT INTO account_tbl(user_id, website_id, name, password) VALUES `;
+    
+    accounts.forEach((element, index) => {
+      let value_str = `(
+        ${user_id},
+        ${element.website},
+        '${element.name}',
+        '${element.password}'
+      )`;
+      
+      if (index != 0) value_str = ','+value_str;
+      sql += value_str;
+    });
+    
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return next(err);
+      }
+
+      connection.query(sql, cb);
+      connection.release();
+    });
+  }
+
   static page(user_id, filter, cb) {
     const pi = filter.pi;
     const ps = filter.ps;

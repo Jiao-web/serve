@@ -2,14 +2,54 @@ var express = require('express');
 var Account = require('../model/account');
 var AccountRole = require('../model/account_role');
 var jwtAuth = require('../middleware/myauth');
+var multer = require('multer');
+var csv = require('csvtojson');
 
 var router = express.Router();
+//定义storage
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '/tmp')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+var upload = multer({
+storage: storage,
+fileFilter: (req, file, cb)=> {
+            var filename = file.originalname;
+            var reg = /^.*?\.(csv)$/i;
+            var bool = filename.match(reg);
+            console.log(bool)
+            if (bool) {
+                cb(null, true)
+            } else {
+                cb("类型错了", false);
+            }
+        },
+}).single('account');
 
 router.get('/', jwtAuth, (req, res, next) => {
   const user_id = req.user.id;
   Account.all(user_id, (err, result) => {
     if (err) return next(err);
     res.send(result);
+  });
+});
+
+router.post('/upload', [jwtAuth, upload], function(req, res, next) {
+  const user_id = req.user.id;
+  const fpath = req.file.path;
+
+  csv()
+  .fromFile(fpath)
+  .then((jsonObj) => {
+    Account.upload(user_id, jsonObj, (err, result) => {
+      if (err) throw err;
+      res.send({msg: 'ok'});
+    });        
   });
 });
 
