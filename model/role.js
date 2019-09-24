@@ -81,16 +81,21 @@ class Role {
     const sortValue = filter.sortValue;
 
     const start = (pi-1)*ps;
-    let filter_str = `where user_id=${user_id}`;
+    let filter_str = `where role_tbl.user_id=${user_id}`;
     let sorter_str = ''; 
 
     if (sortKey && sortValue) {
-      sorter_str = `order by ${sortKey} ${sortValue}`;
+      sorter_str = `order by role_tbl.${sortKey} ${sortValue}`;
+    } else {
+      sorter_str = `order by role_tbl.created_at DESC`;
     }
 
     const sql1 = `select count(*) as total from role_tbl ${filter_str};`;
-    const sql2 = `SELECT * FROM role_tbl ${filter_str} ${sorter_str} limit ${start}, ${ps};`;
-    
+    const sql2 = `SELECT role_tbl.id, role_tbl.name, role_tbl.description,
+    role_tbl.created_at, COUNT(account_role_view.account_id) as account_cnt from 
+    role_tbl left join account_role_view on account_role_view.role_id = role_tbl.id 
+    ${filter_str} group by account_role_view.role_id ${sorter_str} limit ${start}, ${ps}`; 
+
     pool.getConnection((err, connection) => {
       if (err) {
         log(err.message);
