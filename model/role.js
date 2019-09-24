@@ -3,7 +3,11 @@ var pool = require('./conn_db');
 // 数据分析类
 class Role {
   static all(user_id, cb) {
-    const sql = `SELECT * FROM role_tbl where user_id = ${user_id}`;
+    const sql = `SELECT role_tbl.id, role_tbl.name, role_tbl.description,
+    role_tbl.created_at, COUNT(account_role_view.account_id) as account_cnt from 
+    role_tbl left join account_role_view on account_role_view.role_id = role_tbl.id 
+    where role_tbl.user_id=${user_id} group by account_role_view.role_id`;
+    //const sql = `SELECT * FROM role_tbl where user_id = ${user_id}`;
 
     pool.getConnection((err, connection) => {
       if (err) {

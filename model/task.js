@@ -45,6 +45,8 @@ class Task {
   
       if (sortKey && sortValue) {
         sorter_str = `order by ${sortKey} ${sortValue}`;
+      } else {
+        sorter_str = `order by created_at DESC`;
       }
     } catch (error) {
       console.log(error.message);  

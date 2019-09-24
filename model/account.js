@@ -23,18 +23,21 @@ class Account {
     const website_name = filter.website_name;
 
     const start = (pi-1)*ps;
-    let filter_str = `where user_id=${user_id}`;
+    let filter_str = `where account_view.user_id=${user_id}`;
     let sorter_str = ''; 
 
     if (sortKey && sortValue) {
-      sorter_str = `order by ${sortKey} ${sortValue}`;
+      sorter_str = `order by account_view.${sortKey} ${sortValue}`;
     }  
     if (website_name) {
-      filter_str += ` and website_name = '${website_name}'`;
+      filter_str += ` and account_view.website_name = '${website_name}'`;
     }
 
     const sql1 = `select count(*) as total from account_view ${filter_str};`;
-    const sql2 = `SELECT * FROM account_view ${filter_str} ${sorter_str} limit ${start}, ${ps};`;
+    const sql2 = `SELECT account_view.id, account_view.name, account_view.created_at, 
+    account_view.website_name, account_view.state, COUNT(account_role_view.role_id) 
+    as role_cnt FROM account_view LEFT JOIN account_role_view ON account_view.id=account_role_view.account_id
+    ${filter_str} GROUP BY account_role_view.account_id ${sorter_str} limit ${start}, ${ps};`;
     
     pool.getConnection((err, connection) => {
       if (err) {
