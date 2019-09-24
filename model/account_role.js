@@ -23,7 +23,7 @@ class AccountRole {
       ),`;
     });
     values = values.substr(0, values.length - 1);
-    const sql1 = `delete from account_role_tbl where account_id=${ar_id}`;
+    const sql1 = `delete from account_role_tbl where account_id=${account_id}`;
     const sql2 = `insert into account_role_tbl(account_id, role_id) values ${values}`;
 
     pool.getConnection((err, connection) => {
