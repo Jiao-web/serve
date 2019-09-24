@@ -35,7 +35,7 @@ class AccountRole {
         connection.release();
         pool.getConnection((err, conn) => {
           if (err) return cb(err);
-          conn.query(sql22, cb);
+          conn.query(sql2, cb);
         });
       });
       
