@@ -61,8 +61,7 @@ class PushLog {
     }
 
     const sql1 = `select count(*) as total from push_log_view ${filter_str};`;
-    const sql2 = `SELECT id, finished_at, title, comment, result 
-    FROM push_log_view ${filter_str} ${sorter_str} limit ${start}, ${ps};`;
+    const sql2 = `SELECT * FROM push_log_view ${filter_str} ${sorter_str} limit ${start}, ${ps};`;
     
     pool.getConnection((err, connection) => {
       if (err) {
