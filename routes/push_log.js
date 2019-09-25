@@ -4,7 +4,7 @@ var jwtAuth = require('../middleware/myauth');
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', [jwtAuth], function(req, res, next) {
+router.get('/', jwtAuth, function(req, res, next) {
   const user_id = req.user.id;
   const log_id = req.query.id;
   
@@ -37,3 +37,4 @@ router.get('/page', jwtAuth, (req, res, next) => {
     res.send(results);
   });
 });
+module.exports = router;
