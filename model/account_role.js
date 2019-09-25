@@ -39,6 +39,8 @@ class AccountRole {
             conn.query(sql2, cb); 
             conn.release();
           });
+        } else {
+          cb();
         }
       });
       
