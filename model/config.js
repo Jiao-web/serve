@@ -51,6 +51,9 @@ module.exports = [
               },{
                 text: "任务管理",
                 link: "/push/manage",
+              },{
+                text: "推送日志",
+                link: "/push/log",
               }
             ]
           }
@@ -110,6 +113,9 @@ module.exports = [
               },{
                 text: "任务管理",
                 link: "/push/manage",
+              },{
+                text: "推送日志",
+                link: "/push/log",
               }
             ]
           }
