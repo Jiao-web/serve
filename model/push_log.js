@@ -1,6 +1,23 @@
 var pool = require('./conn_db');
 
 class PushLog {
+  static all(user_id, cb) {
+    const sql = `SELECT * FROM push_log_view WHERE user_id=${user_id}`;
+
+    pool.getConnection((err, connection) => {
+      connection.query(sql, cb);
+      connection.release();
+    });
+  }
+
+  static find(user_id, id, cb) {
+    const sql = `SELECT * FROM push_log_view WHERE user_id=${user_id} and id=${id}`;
+    pool.getConnection((err, connection) => {
+      connection.query(sql, cb);
+      connection.release();
+    });
+  }
+
   static page(user_id, filter, cb) {
     const pi = filter.pi;
     const ps = filter.ps;
@@ -18,23 +35,25 @@ class PushLog {
 
     try {
       if (account_name) {
-        filter_str += ` account_name='${account_name}'`;
+        filter_str += ` and account_name='${account_name}'`;
       }
   
       if (website_name) {
-        filter_str += ` website_name='${website_name}'`
+        filter_str += ` and website_name='${website_name}'`
       }
 
       if (result) {
-        filter_str += ` result=${result}`
+        filter_str += ` and result=${result}`
       }
   
       if (date_start && date_end) {
-        filter_str += ` finished_at>'${date_start}' and finished_at<'${date_end}'`;
+        filter_str += ` and finished_at>'${date_start}' and finished_at<'${date_end}'`;
       }
   
       if (sortKey && sortValue) {
         sorter_str = `order by ${sortKey} ${sortValue}`;
+      } else {
+        sorter_str = `order by finished_at DESC`;
       }
     } catch (error) {
       console.log(error.message);  
@@ -42,7 +61,8 @@ class PushLog {
     }
 
     const sql1 = `select count(*) as total from push_log_view ${filter_str};`;
-    const sql2 = `SELECT * FROM push_log_view ${filter_str} ${sorter_str} limit ${start}, ${ps};`;
+    const sql2 = `SELECT id, finished_at, title, comment, result 
+    FROM push_log_view ${filter_str} ${sorter_str} limit ${start}, ${ps};`;
     
     pool.getConnection((err, connection) => {
       if (err) {

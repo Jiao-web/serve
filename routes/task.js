@@ -8,7 +8,7 @@ router.get('/', [jwtAuth], function(req, res, next) {
   const user_id = req.user.id;
   const task_id = req.query.id;
   
-  if (role_id) {
+  if (task_id) {
     Task.find(user_id, task_id, (err, result) => {
       if (err) return next(err);
       if (result.length === 0) {

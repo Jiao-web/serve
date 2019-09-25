@@ -28,19 +28,19 @@ class Task {
 
     try {
       if (role_name) {
-        filter_str += ` role_name='${role_name}'`;
+        filter_str += ` and role_name='${role_name}'`;
       }
   
       if (website_name) {
-        filter_str += ` website_name='${website_name}'`
+        filter_str += ` and website_name='${website_name}'`
       }
 
       if (state) {
-        filter_str += ` result=${state}`
+        filter_str += ` and result=${state}`
       }
   
       if (date_start && date_end) {
-        filter_str += ` created_at>'${date_start}' and created_at<'${date_end}'`;
+        filter_str += ` and created_at>'${date_start}' and created_at<'${date_end}'`;
       }
   
       if (sortKey && sortValue) {
