@@ -23,7 +23,7 @@ class Task {
     const date_end = filter.date_end;
 
     const start = (pi-1)*ps;
-    let filter_str = `where user_id=${user_id}`;
+    let filter_str = `where state != 2 and user_id=${user_id}`;
     let sorter_str = '';
 
     try {
