@@ -94,7 +94,7 @@ class Role {
     const sql2 = `SELECT role_tbl.id, role_tbl.name, role_tbl.description,
     role_tbl.created_at, COUNT(account_role_view.account_id) as account_cnt from 
     role_tbl left join account_role_view on account_role_view.role_id = role_tbl.id 
-    ${filter_str} group by account_role_view.role_id ${sorter_str} limit ${start}, ${ps}`; 
+    ${filter_str} group by role_tbl.id ${sorter_str} limit ${start}, ${ps}`; 
 
     pool.getConnection((err, connection) => {
       if (err) {
