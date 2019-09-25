@@ -33,10 +33,13 @@ class AccountRole {
       connection.query(sql1, (err) => {
         if (err) return cb(err);
         connection.release();
-        pool.getConnection((err, conn) => {
-          if (err) return cb(err);
-          conn.query(sql2, cb);
-        });
+        if (values.length >= 2) {   
+          pool.getConnection((err, conn) => {
+            if (err) return cb(err);
+            conn.query(sql2, cb); 
+            conn.release();
+          });
+        }
       });
       
     });
