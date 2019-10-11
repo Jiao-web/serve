@@ -110,6 +110,32 @@ class PushLog {
       connection.release();
     });
   }
+
+  static groupByDay(user_id, cb) {
+    const sql = `select a.click_date as x,ifnull(b.count,0) as y from ( SELECT curdate() as click_date union all SELECT date_sub(curdate(), interval 1 day) as click_date union all SELECT date_sub(curdate(), interval 2 day) as click_date union all SELECT date_sub(curdate(), interval 3 day) as click_date union all SELECT date_sub(curdate(), interval 4 day) as click_date union all SELECT date_sub(curdate(), interval 5 day) as click_date union all SELECT date_sub(curdate(), interval 6 day) as click_date ) a left join ( select date(finished_at) as datetime, count(*) as count from push_log_view where user_id=${user_id} group by datetime ) b on a.click_date = b.datetime`;
+
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return next(err);
+      }
+
+      connection.query(sql, cb);
+      connection.release();
+    });
+  }
+
+  static groupByState(user_id, cb) {
+    const sql = `SELECT result, COUNT(*) as count FROM push_log_view WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(finished_at) and user_id=${user_id} GROUP BY result`;
+  
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return next(err);
+      }
+
+      connection.query(sql, cb);
+      connection.release();
+    });
+  }
 }
 
 module.exports = PushLog;

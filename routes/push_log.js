@@ -44,4 +44,23 @@ router.get('/page', jwtAuth, (req, res, next) => {
     res.send(results);
   });
 });
+
+router.get('/dayGroup', jwtAuth, (req, res, next) => {
+  const user_id = req.user.id;
+  
+  Pushlog.groupByDay(user_id, (err, results) => {
+    if (err) return next(err);
+    res.send(results);
+  });
+});
+
+router.get('/stateGroup', jwtAuth, (req, res, next) => {
+  const user_id = req.user.id;
+  
+  Pushlog.groupByState(user_id, (err, results) => {
+    if (err) return next(err);
+    res.send(results);
+  });
+});
+
 module.exports = router;
