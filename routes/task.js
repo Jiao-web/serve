@@ -97,27 +97,4 @@ router.get('/pause', jwtAuth, (req, res, next) => {
   });
 });
 
-router.get('/msgs', (req, res, next) => {
-  const mock_msg = [
-    {
-      id: 1,
-      content: '这才是商人，以利为追求，没利了就抛弃了，很正常'
-    },
-    {
-      id: 2,
-      content: '政治投机客'
-    },
-    {
-      id: 3,
-      content: '郭叛徒，让国民党毫无还手心力，台湾只会让民进党带人深渊'
-    },
-    {
-      id: 4,
-      content: '这下看来韩草包肯定是选不上了，哪有一个刚上任不到三个月的市长又继续选的搞法。'
-    },
-  ];
-  res.json(mock_msg);
-});
-
-
 module.exports = router;

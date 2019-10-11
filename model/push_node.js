@@ -2,10 +2,7 @@ var pool = require('./conn_db');
 
 class PushNode {
   static add(name, ip, cb) {
-    const sql = `insert into push_node_tbl (name, ip) values(
-      '${name}',
-      '${ip}',
-    )`
+    const sql = `insert into push_node_tbl (name, ip) values('${name}','${ip}')`;
 
     pool.getConnection((err, connection) => {
       if (err) {
@@ -17,28 +14,34 @@ class PushNode {
     });
   }
 
-  static strike(node_id, cb) {
-    const sql = `update push_node_tbl set heart_strike=CURRENT_TIMESTAMP where id=${node_id}`;
-
+  static update(name, ip, cb) {
+    const sql = `update push_node_tbl set ip='${ip}' where name='${name}'`;
     pool.getConnection((err, connection) => {
       if (err) {
         return next(err);
       }
-
       connection.query(sql, cb);
       connection.release();
     });
   }
 
-  // 统计半小时内的活跃节点
-  static alive(time_interval, cb) {
-    const sql = `select * from push_node_tbl where heart_strike > date_add(now(),interval ${time_interval} second)`;
-  
+  static all(dead_line, cb) {
+    const sql = `select id, ip, name, heart_strike, (heart_strike > '${dead_line}') as alive from push_node_tbl`;
     pool.getConnection((err, connection) => {
       if (err) {
         return next(err);
       }
+      connection.query(sql, cb);
+      connection.release();
+    });
+  }
 
+  static find_by_name(name, cb) {
+    const sql = `select * from push_node_tbl where name='${name}'`;
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return next(err);
+      }
       connection.query(sql, cb);
       connection.release();
     });
@@ -46,3 +49,4 @@ class PushNode {
 }
 
 module.exports = PushNode;
+

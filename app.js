@@ -15,6 +15,7 @@ var accountRoleRouter = require('./routes/account_role');
 var indexRouter = require('./routes/index');
 var statisticRouter = require('./routes/statistic');
 var logRouter = require('./routes/push_log');
+var pushnodeRouter = require('./routes/push_node');
 var app = express();
 
 app.set('jwtTokenSecret', '%^&*iuet5437');
@@ -42,6 +43,7 @@ app.use('/role', roleRouter);
 app.use('/account', accountRouter);
 app.use('/accountRole', accountRoleRouter);
 app.use('/log', logRouter);
+app.use('/node', pushnodeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

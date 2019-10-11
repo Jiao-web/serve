@@ -27,6 +27,13 @@ router.get('/', jwtAuth, function(req, res, next) {
   }
 });
 
+router.post('/', (req, res, next) => {
+  Pushlog.add(req.body, (err) => {
+    if (err) return next(err);
+    res.send({msg: 'ok'});
+  });
+});
+
 router.get('/page', jwtAuth, (req, res, next) => {
   const user_id = req.user.id;
   const filter = req.query;
