@@ -15,7 +15,9 @@ class PushNode {
   }
 
   static update(name, ip, cb) {
-    const sql = `update push_node_tbl set ip='${ip}' where name='${name}'`;
+    const sql = `update push_node_tbl set heart_strike=now() where name='${name}'`;
+    console.log(sql);
+    
     pool.getConnection((err, connection) => {
       if (err) {
         return next(err);
@@ -26,7 +28,7 @@ class PushNode {
   }
 
   static all(dead_line, cb) {
-    const sql = `select id, ip, name, heart_strike, (heart_strike > '${dead_line}') as alive from push_node_tbl`;
+    const sql = `select id, ip, name, heart_strike, (heart_strike > '${dead_line}') as alive from push_node_tbl order by heart_strile DESC`;
     pool.getConnection((err, connection) => {
       if (err) {
         return next(err);

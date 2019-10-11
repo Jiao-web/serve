@@ -145,8 +145,9 @@ class Task {
     });
   }
 
-  static pause(user_id, task_id, cb) {
-    let sql = `update task_tbl set state=0 where id=${task_id} and user_id=${user_id} and state=1`;
+  static changeTaskState(user_id, task_id, old_state, new_state, cb) {
+    let sql = `update task_tbl set state=${new_state} where id=${task_id} and user_id=${user_id} and state=${old_state}`;
+    console.log(sql);
     pool.getConnection((err, connection) => {
       if (err) {
         cb(err);
@@ -157,14 +158,55 @@ class Task {
     });
   }
 
-  static start(user_id, task_id, cb) {
-    let sql = `update task_tbl set state=1 where id=${task_id} and user_id=${user_id} and state=0`;
+  static getAccount(user_id, role_id, website_id, cb) {
+    const sql = `SELECT account_id as id, account_name as name, account_pwd as password FROM account_role_view where user_id=${user_id} and role_id=${role_id} and website_id = ${website_id} ORDER BY RAND() LIMIT 1`;
+    console.log(sql);
     pool.getConnection((err, connection) => {
       if (err) {
         cb(err);
         return ;
       }
       connection.query(sql, cb);
+    });
+  }
+
+  // 随机获取一条任务
+  static fetchTaskRand(website_id, cb) {
+    const sql = `SELECT * FROM task_view where website_id=${website_id} and state = 1 ORDER BY RAND() LIMIT 1`;
+    console.log(sql);
+    
+    pool.getConnection((err, connection) => {
+      if (err) {
+        cb(err);
+        return ;
+      }
+      connection.query(sql, (err, result) => {
+        if (err) {
+          cb(err);
+          return ;
+        }
+        if (result.length === 0) {
+          return cb(null, {msg: 'no task'});
+        } else {
+          const curTask = result[0];
+          Task.getAccount(curTask.user_id,
+            curTask.role_id,
+            curTask.website_id,
+            (err, res2) => {
+              if (err) return cb(err);
+              if (res2.length === 0) {
+                return cb(null, {msg: 'no account', task: curTask});
+              } else {
+                Task.changeTaskState(curTask.user_id, curTask.id, 1, 2, (err, res) => {
+                  if (err) {
+                    return cb(err);
+                  }
+                  return cb(null, {msg: 'ok',task: curTask,account: res2[0]});
+                });
+              }
+            });
+        }
+      });
       connection.release();
     });
   }

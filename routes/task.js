@@ -73,7 +73,7 @@ router.get('/start', jwtAuth, (req, res, next) => {
   const user_id = req.user.id;
   const task_id = req.query.id;
 
-  Task.start(user_id, task_id, (err, result) => {
+  Task.changeTaskState(user_id, task_id, 0, 1, (err, result) => {
     if (err) {
       return next(err);
     }
@@ -87,13 +87,23 @@ router.get('/pause', jwtAuth, (req, res, next) => {
   const user_id = req.user.id;
   const task_id = req.query.id;
 
-  Task.pause(user_id, task_id, (err, result) => {
+  Task.changeTaskState(user_id, task_id, 0, 1, (err, result) => {
     if (err) {
       return next(err);
     }
     console.log(result);
-    res.send({msg:'ok'});
-    
+    res.send({msg:'ok'});    
+  });
+});
+
+router.get('/fetchTask', (req, res, next) => {
+  const website_id = req.query.website_id;
+
+  Task.fetchTaskRand(website_id, (err, result) => {
+    if (err) {
+      return next(err);
+    }
+    res.send(result);    
   });
 });
 

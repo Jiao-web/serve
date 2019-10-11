@@ -96,8 +96,10 @@ class PushLog {
       ${account_id},
       ${task_id},
       ${result},
-      '${remark}',
+      '${remark}'
     )`;
+    console.log(sql);
+    
 
     pool.getConnection((err, connection) => {
       if (err) {
