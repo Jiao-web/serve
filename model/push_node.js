@@ -29,6 +29,8 @@ class PushNode {
 
   static all(dead_line, cb) {
     const sql = `select id, ip, name, heart_strike, (heart_strike > '${dead_line}') as alive from push_node_tbl order by heart_strike DESC`;
+    console.log(sql);
+    
     pool.getConnection((err, connection) => {
       if (err) {
         return next(err);
