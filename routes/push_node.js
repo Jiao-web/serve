@@ -27,7 +27,7 @@ function alive(dead_line, cb) {
     if (err){ 
       return cb(err);
     } else {
-      cb(res);     
+      cb(null, res);     
     }    
   });
 }
@@ -45,11 +45,14 @@ router.post('/', function(req, res, next) {
   });
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res, next) => {  
   const now = new Date();
   const dl = new Date(now.setTime(now.getTime()-15*60*1000));
+  
   alive(dl.toISOString(), (err, result) => {
     if (err) {
+      console.log(err);
+      
       return next(err);
     } else {
       res.send(result);
