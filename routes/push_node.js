@@ -40,7 +40,7 @@ router.post('/', function(req, res, next) {
     if (err) {
       return next(err);
     } else {
-      res.send({msg: 'ok'});
+      res.send({msg: 'ok', node: result[0]});
     }
   });
 });
