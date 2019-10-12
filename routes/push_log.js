@@ -37,7 +37,6 @@ router.post('/', (req, res, next) => {
 router.get('/page', jwtAuth, (req, res, next) => {
   const user_id = req.user.id;
   const filter = req.query;
-  console.log(filter);  
   
   Pushlog.page(user_id, filter, (err, results) => {
     if (err) return next(err);
@@ -50,7 +49,8 @@ router.get('/dayGroup', jwtAuth, (req, res, next) => {
   
   Pushlog.groupByDay(user_id, (err, results) => {
     if (err) return next(err);
-    res.send(results);
+    const r = results.map(w => {return {x:w.x.toLocaleDateString(), y: w.y}});    
+    res.send(r);
   });
 });
 

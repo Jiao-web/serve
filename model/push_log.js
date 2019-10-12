@@ -112,7 +112,16 @@ class PushLog {
   }
 
   static groupByDay(user_id, cb) {
-    const sql = `select a.click_date as x,ifnull(b.count,0) as y from ( SELECT curdate() as click_date union all SELECT date_sub(curdate(), interval 1 day) as click_date union all SELECT date_sub(curdate(), interval 2 day) as click_date union all SELECT date_sub(curdate(), interval 3 day) as click_date union all SELECT date_sub(curdate(), interval 4 day) as click_date union all SELECT date_sub(curdate(), interval 5 day) as click_date union all SELECT date_sub(curdate(), interval 6 day) as click_date ) a left join ( select date(finished_at) as datetime, count(*) as count from push_log_view where user_id=${user_id} group by datetime ) b on a.click_date = b.datetime`;
+    const sql = `select date(a.click_date) as x,ifnull(b.count,0) as y from (
+      SELECT date_sub(curdate(), interval 6 day) as click_date union all 
+      SELECT date_sub(curdate(), interval 5 day) as click_date union all 
+      SELECT date_sub(curdate(), interval 4 day) as click_date union all 
+      SELECT date_sub(curdate(), interval 3 day) as click_date union all 
+      SELECT date_sub(curdate(), interval 2 day) as click_date union all 
+      SELECT date_sub(curdate(), interval 1 day) as click_date union all 
+      SELECT curdate() as click_date ) a left join (
+        select date(finished_at) as datetime, count(*) as count from push_log_view 
+        where user_id=${user_id} group by datetime ) b on a.click_date = b.datetime`;
 
     pool.getConnection((err, connection) => {
       if (err) {
