@@ -62,7 +62,7 @@ class Account {
     const sql2 = `SELECT account_view.id, account_view.name, account_view.created_at, 
     account_view.website_name, account_view.state, COUNT(account_role_view.role_id) 
     as role_cnt, GROUP_CONCAT(account_role_view.role_name) as roles FROM account_view LEFT JOIN account_role_view ON account_view.id=account_role_view.account_id
-    ${filter_str} GROUP BY account_view.id ${sorter_str} limit ${start}, ${ps};`;
+    ${filter_str} GROUP BY account_view.id ${sorter_str} limit ${start}, ${ps};`;    
     
     pool.getConnection((err, connection) => {
       if (err) {

@@ -87,6 +87,9 @@ module.exports = [
               },{
                 text: "伊莉",
                 link: "/analysis/eyny",
+              },{
+                text: "天涯",
+                link: "/analysis/tianya",
               }
             ]
           },
