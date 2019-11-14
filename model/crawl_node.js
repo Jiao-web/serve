@@ -9,7 +9,7 @@ class PushNode {
 
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
 
       connection.query(sql, cb);
@@ -22,7 +22,7 @@ class PushNode {
 
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
 
       connection.query(sql, cb);
@@ -36,7 +36,7 @@ class PushNode {
   
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
 
       connection.query(sql, cb);
