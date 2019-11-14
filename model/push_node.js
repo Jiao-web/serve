@@ -6,7 +6,7 @@ class PushNode {
 
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
 
       connection.query(sql, cb);
@@ -20,7 +20,7 @@ class PushNode {
     
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
       connection.query(sql, cb);
       connection.release();
@@ -33,7 +33,7 @@ class PushNode {
     
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
       connection.query(sql, cb);
       connection.release();
@@ -44,7 +44,7 @@ class PushNode {
     const sql = `select * from push_node_tbl where name='${name}'`;
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
       connection.query(sql, cb);
       connection.release();

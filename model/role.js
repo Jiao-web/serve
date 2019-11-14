@@ -11,7 +11,7 @@ class Role {
 
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
 
       connection.query(sql, cb);
@@ -27,7 +27,7 @@ class Role {
     
     pool.getConnection((err, connection) => {
       if (err) {
-        return next(err);
+        return cb(err);
       }
 
       connection.query(sql, cb);
