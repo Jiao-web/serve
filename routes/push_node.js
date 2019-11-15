@@ -2,18 +2,18 @@ var express = require('express');
 var PushNode = require('../model/push_node');
 var router = express.Router();
 
-function time_strike(name, ip, cb) {
-  PushNode.find_by_name(name, (err, res) => {
+function time_strike(name, task_name, ip, cb) {
+  PushNode.find_by_name(name, task_name, (err, res) => {
     if (err) return cb(err);
     if (res.length > 0) {
-      PushNode.update(name, ip, (err) => {
+      PushNode.update(name, task_name, ip, (err) => {
         if (err) return cb(err);
         cb(null, res);
       });
     } else {
-      PushNode.add(name, ip, (err, res) => {
+      PushNode.add(name, task_name, ip, (err, res) => {
         if (err) return cb(err);
-        PushNode.find_by_name(name, (err, res) => {
+        PushNode.find_by_name(name, task_name, (err, res) => {
           if (err) return cb(err);
           cb(null, res);
         });
@@ -34,9 +34,10 @@ function alive(dead_line, cb) {
 
 router.post('/', function(req, res, next) {
   const name = req.body.name;
+  const task_name = req.body.task_name;
   const ip = req.body.ip;
   
-  time_strike(name, ip, (err, result) => {
+  time_strike(name, task_name, ip, (err, result) => {
     if (err) {
       return next(err);
     } else {
