@@ -48,7 +48,7 @@ router.post('/', function(req, res, next) {
 
 router.get('/', (req, res, next) => {  
   const now = new Date();
-  const dl = new Date(now.setTime(now.getTime()+8*60*60*1000-30*60*1000));
+  const dl = new Date(now.setTime(now.getTime()+8*60*60*1000-60*60*1000));
   
   alive(dl.toISOString(), (err, result) => {
     if (err) {
